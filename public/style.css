@@ -5,16 +5,21 @@ html, body {
 	background-color: #FAFAF2;
 }
 
+a {
+	color: black;
+	text-decoration: none;
+}
+
 .flexbox {
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	/*justify-content: flex-start;*/
+	align-items: center;
 }
 
+/*--------TITLE--------*/
+
 .title-box {
-	/*display: flex;
-	justify-content: center;*/
 	text-align: center;
 }
 
@@ -22,6 +27,8 @@ html, body {
 	font-family: 'Oxygen';
 	font-size: 5em;
 }
+
+/*--------FORM--------*/
 
 .form {
 	display: flex;
@@ -66,9 +73,7 @@ input:focus ~ .input-underline {
 
 input:valid ~ .input-underline {
 	width: 100%;
-	/*background-color: #49A0DF;*/
 	background-color: #768BB4;
-	/*background-color: #68A9A4;*/
 	transition: 0.3s;
 }
 
@@ -88,26 +93,19 @@ input:focus ~ .input-label {
 	top: -13px;
 	left: 10px;
 	font-size: 1em;
-	/*color: #768BB4;*/
-	/*color: #49A0DF;*/
 	color: gray;
 	font-weight: bold;
 }
 
 input:valid ~ .input-label {
-	/*top: -16px;*/
-	/*top: -30%;*/
 	top: -13px;
 	left: 10px;
 	font-size: 1em;
-	/*color: #49A0DF;*/
 	color: #768BB4;
-	/*color: #68A9A4;*/
 	font-weight: bold;
 }
 
-.submit-btn {
-	/*margin: 20px;*/
+.btn {
 	margin: 40px;
 	height: 60px;
 	width: 180px;
@@ -119,13 +117,26 @@ input:valid ~ .input-label {
 	transition: 0.2s;
 }
 
-.submit-btn:hover {
+.btn:hover {
 	background-color: #FCD0B7;
 	cursor: pointer;
 	transition: 0.2s;
 }
 
-.submit-btn:focus {
+.btn:focus {
 	outline: none;
 	color: gray;
+}
+
+.link-to-register {
+	font-family: 'Oxygen';
+	font-size: 0.9em;
+	color: gray;
+	transition: 0.2s;
+}
+
+.link-to-register:hover {
+	color: #768BB4;
+	text-decoration: underline;
+	transition: 0.2s;
 }
