@@ -8,7 +8,12 @@ const db = require('./models/');
 module.exports = app => {
   app.post('/register', (req, res) => {
     console.info(req.body);
-    res.json(req.body);
+    db.User.create({ username: req.body.username, password: req.body.password })
+      .then(result => {
+        console.info(result);
+        res.redirect('/secure');
+      })
+      .catch(err => console.error(err));
   });
   app.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/register.html'));
@@ -16,7 +21,16 @@ module.exports = app => {
 
   app.post('/login', (req, res) => {
     console.info(req.body);
-    res.json(req.body);
+    db.User.findOne({ username: req.body.username, password: req.body.password })
+      .then(result => {
+        console.info(result);
+        if (result !== null) {
+          res.redirect('/secure');
+        } else {
+          res.send(401);
+        }
+      })
+      .catch(err => console.error(err));
   });
   app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/login.html'));
@@ -30,9 +44,6 @@ module.exports = app => {
     res.sendFile(path.join(__dirname, '/public/secure.html'));
   });
 
-  app.post('/', (req, res) => {
-    res.json('Got your request!');
-  });
   app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/index.html'));
   });
