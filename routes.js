@@ -1,5 +1,6 @@
 const path = require('path');
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost/authenticate', { useUnifiedTopology: true, useNewUrlParser: true });
 
@@ -8,12 +9,19 @@ const db = require('./models/');
 module.exports = app => {
   app.post('/register', (req, res) => {
     console.info(req.body);
-    db.User.create({ username: req.body.username, password: req.body.password })
-      .then(result => {
-        console.info(result);
-        res.redirect('/secure');
-      })
-      .catch(err => console.error(err));
+
+    bcrypt.genSalt(10)
+      .then(salt => {
+        bcrypt.hash(req.body.password, salt)
+          .then(hash => {
+            db.User.create({ username: req.body.username, hash })
+              .then(result => {
+                console.info(result);
+                res.redirect('/secure');
+              })
+              .catch(err => console.error(err));
+          });
+      });
   });
   app.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/register.html'));
@@ -21,14 +29,24 @@ module.exports = app => {
 
   app.post('/login', (req, res) => {
     console.info(req.body);
-    db.User.findOne({ username: req.body.username, password: req.body.password })
+    db.User.findOne({ username: req.body.username })
       .then(result => {
         console.info(result);
-        if (result !== null) {
-          res.redirect('/secure');
-        } else {
-          res.send(401);
+        if (result === null) {
+          res.sendStatus(401);
         }
+
+        bcrypt.compare(req.body.password, result.hash)
+          .then(match => {
+            console.info(match);
+
+            if (match) {
+              res.redirect('/secure');
+            }
+
+            res.sendStatus(401);
+          })
+          .catch(err => res.status(401).send(err));
       })
       .catch(err => console.error(err));
   });
