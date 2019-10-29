@@ -1,12 +1,18 @@
 const path = require('path');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-
-mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost/authenticate', { useUnifiedTopology: true, useNewUrlParser: true });
-
-const db = require('./models/');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
 module.exports = app => {
+  mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost/authenticate', { useUnifiedTopology: true, useNewUrlParser: true });
+  app.use(session({
+    secret: 'keyboard cat', resave: false, saveUninitialized: false,
+    store: new MongoStore({ mongooseConnection: mongoose.connection })
+  }));
+  
+  const db = require('./models/');
+
   app.post('/register', (req, res) => {
     console.info(req.body);
 
@@ -17,6 +23,7 @@ module.exports = app => {
             db.User.create({ username: req.body.username, hash })
               .then(result => {
                 console.info(result);
+                req.session.user = result;
                 res.redirect('/secure');
               })
               .catch(err => console.error(err));
@@ -29,9 +36,11 @@ module.exports = app => {
 
   app.post('/login', (req, res) => {
     console.info(req.body);
+
     db.User.findOne({ username: req.body.username })
       .then(result => {
         console.info(result);
+
         if (result === null) {
           res.sendStatus(401);
         }
@@ -41,13 +50,15 @@ module.exports = app => {
             console.info(match);
 
             if (match) {
-              req.session.authenticated = true;
-              res.redirect('/secure');
+              req.session.user = result;
             }
 
-            res.sendStatus(401);
+            res.redirect('/secure');
           })
-          .catch(err => res.status(401).send(err));
+          .catch(err => {
+            console.error(err);
+            res.sendStatus(401);
+          });
       })
       .catch(err => console.error(err));
   });
@@ -61,13 +72,13 @@ module.exports = app => {
         console.error(err);
       }
 
-      res.send(200);
+      res.sendStatus(200);
     });
   });
 
   app.get('/secure', (req, res) => {
     console.info(req.session);
-    if (!req.session.authenticated) {
+    if (!req.session.user) {
       res.redirect('/login')
     }
     res.sendFile(path.join(__dirname, '/public/secure.html'));
