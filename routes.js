@@ -41,6 +41,7 @@ module.exports = app => {
             console.info(match);
 
             if (match) {
+              req.session.authenticated = true;
               res.redirect('/secure');
             }
 
@@ -55,10 +56,20 @@ module.exports = app => {
   });
 
   app.post('/logout', (req, res) => {
-    res.send(200);
+    req.session.destroy(err => {
+      if (err) {
+        console.error(err);
+      }
+
+      res.send(200);
+    });
   });
 
   app.get('/secure', (req, res) => {
+    console.info(req.session);
+    if (!req.session.authenticated) {
+      res.redirect('/login')
+    }
     res.sendFile(path.join(__dirname, '/public/secure.html'));
   });
 
