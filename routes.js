@@ -1,3 +1,10 @@
+const path = require('path');
+const mongoose = require('mongoose');
+
+mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost/authenticate', { useUnifiedTopology: true, useNewUrlParser: true });
+
+const db = require('./models/');
+
 module.exports = app => {
   app.post('/register', (req, res) => {
     console.info(req.body);
