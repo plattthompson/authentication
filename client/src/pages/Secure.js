@@ -20,7 +20,7 @@ class Secure extends Component {
     return (
       <Fragment>
         <Title>This is a secure page</Title>
-        <button id="logout" onClick={this.handleLogout} class="btn">LOG OUT</button>
+        <button id="logout" onClick={this.handleLogout} className="btn">LOG OUT</button>
       </Fragment>
     );
   }

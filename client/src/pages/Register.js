@@ -27,7 +27,6 @@ class Register extends Component {
     event.preventDefault();
 
     API.register(this.state.username, this.state.password)
-      .then(res => res.json())
       .then(res => console.info(res))
       .catch(err => console.error(err));
   }
@@ -37,7 +36,7 @@ class Register extends Component {
       <Fragment>
         <Title>Register</Title>
         <Form inputHandler={this.handleInputChange} submitHandler={this.handleSubmit} />
-        <Link to="/login" class="link-to-register">Already have an account? Login here</Link>
+        <Link to="/login" className="link-to-register">Already have an account? Login here</Link>
       </Fragment>
     );
   }

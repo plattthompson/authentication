@@ -27,7 +27,6 @@ class Login extends Component {
     event.preventDefault();
 
     API.login(this.state.username, this.state.password)
-      .then(res => res.json())
       .then(res => console.info(res))
       .catch(err => console.error(err));
   }
