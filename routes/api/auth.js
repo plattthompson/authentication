@@ -12,4 +12,7 @@ router.route('/register')
 router.route('/login')
   .post(authController.login);
 
+router.route('/session/:sid')
+  .get(authController.validateSession);
+
 module.exports = router;

@@ -40,7 +40,19 @@ module.exports = {
       })
       .catch(err => res.status(500).send(err.message));
   },
+  validateSession: (req, res) => {
+    console.info('sid:', req.session._id);
+    if (req.params.sid === req.session._id) {
+      res.send(200);
+    }
+    res.send(403);
+  },
   logout: (req, res) => {
-    // ...
+    req.session.destroy(err => {
+      if (err) {
+        res.status(500).send(err.message);
+      }
+      res.send(200);
+    });
   }
 };

@@ -12,4 +12,5 @@ export default {
       body: JSON.stringify({ username, password })
     }),
   logout: () => fetch("/api/auth/", { method: 'DELETE' }),
+  validateCookie: sid => fetch(`/api/auth/session/${sid}`),
 };

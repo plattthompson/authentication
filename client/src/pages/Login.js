@@ -27,7 +27,7 @@ class Login extends Component {
     event.preventDefault();
 
     API.login(this.state.username, this.state.password)
-      .then(res => console.info(res))
+      .then(res => this.props.history.push('/secure'))
       .catch(err => console.error(err));
   }
 
@@ -36,7 +36,7 @@ class Login extends Component {
       <Fragment>
         <Title>Login</Title>
         <Form inputHandler={this.handleInputChange} submitHandler={this.handleSubmit} />
-        <Link to="/register" class="link-to-register">First time? Register here</Link>
+        <Link to="/register" className="link-to-register">First time? Register here</Link>
       </Fragment>
     );
   }
