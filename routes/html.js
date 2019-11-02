@@ -1,5 +1,7 @@
 const path = require('path');
+const passport = require('passport');
 const router = require('express').Router();
+const auth = require('../utils/auth');
 
 router.route('/register')
   .get((req, res) => {
@@ -12,10 +14,7 @@ router.route('/login')
   })
 
 router.route('/secure')
-  .get((req, res) => {
-    if (!req.session.user) {
-      res.redirect('/login');
-    }
+  .get(auth.isLoggedIn, (req, res) => {
     res.sendFile(path.join(__dirname, '../public/secure.html'));
   });
 

@@ -3,6 +3,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const auth = require('./utils/auth');
+
+passport.use(new LocalStrategy(auth.verify));
+passport.serializeUser(auth.serializeUser);
+passport.deserializeUser(auth.deserializeUser);
 
 const routes = require('./routes/');
 
@@ -27,6 +34,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.use(session(sessConfig));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(routes);
 
 app.listen(process.env.PORT || 3000, () => {
