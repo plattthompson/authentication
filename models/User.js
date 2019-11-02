@@ -12,8 +12,7 @@ const UserSchema = new Schema({
     type: String
   },
   githubId: {
-    type: String,
-    unique: true
+    type: String
   }
 })
 
