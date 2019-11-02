@@ -15,7 +15,7 @@
 	<script>
 		const logoutBtn = document.querySelector('#logout');
 		logoutBtn.addEventListener('click', event => {
-			fetch('/logout', { method: 'POST' })
+			fetch('/logout', { method: 'DELETE' })
 				.then(() => window.location.reload())
 				.catch(err => console.error(err));
 		});

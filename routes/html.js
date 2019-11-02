@@ -13,6 +13,9 @@ router.route('/login')
 
 router.route('/secure')
   .get((req, res) => {
+    if (!req.session.user) {
+      res.redirect('/login');
+    }
     res.sendFile(path.join(__dirname, '../public/secure.html'));
   });
 

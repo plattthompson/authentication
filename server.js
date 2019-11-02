@@ -18,7 +18,7 @@ app.use(express.static('public'));
 const sessConfig = {
   secret: 'keyboard cat', resave: false, saveUninitialized: false,
   store: new MongoStore({ mongooseConnection: mongoose.connection }),
-  cookie: { path: '/', httpOnly: false, maxAge: 5 * 60 * 1000 }
+  cookie: { path: '/', httpOnly: true, maxAge: 5 * 60 * 1000 }
 }
 
 if (process.env.NODE_ENV === 'production') {
