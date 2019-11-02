@@ -28,6 +28,18 @@ module.exports = {
       })
       .catch(err => done(err));
   },
+  github: (accessToken, refreshToken, profile, done) => {
+    db.User.findOne({ githubId: profile.id })
+      .then(user => {
+        if (!user) {
+          db.User.create({ githubId: profile.id, username: profile.username })
+            .then(newUser => done(null, newUser))
+            .catch(err => done(err));
+        }
+        done(null, user);
+      })
+      .catch(err => done(err));
+  },
   isLoggedIn: (req, res, next) => {
     if (req.user) {
       next();

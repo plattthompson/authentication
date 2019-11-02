@@ -9,8 +9,11 @@ const UserSchema = new Schema({
     unique: true
   },
   hash: {
+    type: String
+  },
+  githubId: {
     type: String,
-    required: true
+    unique: true
   }
 })
 
