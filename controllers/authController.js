@@ -41,8 +41,9 @@ module.exports = {
       .catch(err => res.status(500).send(err.message));
   },
   validateSession: (req, res) => {
-    console.info('sid:', req.session._id);
-    if (req.params.sid === req.session._id) {
+    const reqsid = decodeURIComponent(req.params.sid).split(':')[1].split('.')[0];
+    console.info('sid:', req.sessionID, reqsid);
+    if (reqsid === req.sessionID) {
       res.send(200);
     }
     res.send(403);
